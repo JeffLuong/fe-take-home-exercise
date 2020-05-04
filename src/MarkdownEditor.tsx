@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+
+import { useDebounce } from './hooks';
 
 import Preview from './Preview';
 
@@ -25,20 +27,6 @@ const MarkdownPreview = styled(Preview)`
 
 type MarkdownEditorProps = {
     placeholder?: string;
-};
-
-const useDebounce = (initValue: string, delay: number): string => {
-    const [value, setValue] = useState(initValue);
-
-    useEffect(() => {
-        const timeout = setTimeout(() => {
-            setValue(initValue);
-        }, delay);
-
-        return () => clearTimeout(timeout);
-    }, [initValue, delay]);
-
-    return value;
 };
 
 const MarkdownEditor = ({ placeholder = '' }: MarkdownEditorProps): JSX.Element => {
