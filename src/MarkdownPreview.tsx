@@ -16,8 +16,8 @@ type PreviewProps = {
 };
 
 const MarkdownPreview = ({ children, options }: PreviewProps): JSX.Element => (
-  <PreviewContainer>
-    <Markdown options={{ ...options }} data-testid="markdown-preview">
+  <PreviewContainer data-testid="markdown-preview">
+    <Markdown options={{ ...options }}>
       {children}
     </Markdown>
   </PreviewContainer>
