@@ -41,6 +41,8 @@ const Header = styled.header`
     background-color: #0077FF;
     padding: 1rem 2rem;
     height: ${headerHeight};
+    display: flex;
+    justify-content: space-between;
 
     > h1 {
         margin: 0;
@@ -49,9 +51,49 @@ const Header = styled.header`
 
     @media (max-width: 960px) {
         height: ${headerHeightSm};
+        padding: .5rem 2rem;
 
         > h1 {
-            font-size: 1.125rem;
+            font-size: 1.5rem;
+            line-height: 1.5;
+        }
+    }
+`;
+
+
+const Tooltip = styled.div`
+    background-color: #001733;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, 75%);
+    padding: .5rem .75rem;
+    border-radius: 3px;
+    display: none;
+`;
+
+const Button = styled.button`
+    background-color: #005fcc;
+    border: 1px solid #005fcc;
+    border-bottom: 3px solid #004799;
+    border-radius: 4px;
+    color: #ffffff;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 700;
+    padding: .25rem .75rem;
+    position: relative;
+    outline: none;
+    height: 100%;
+
+    &:active {
+        border-bottom: 1px solid #005fcc;
+        transform: translateY(2px);
+    }
+
+    &:hover {
+        &:not(:active) > ${Tooltip} {
+            display: block;
         }
     }
 `;
@@ -81,7 +123,7 @@ const getCommand = (e: CustomKBEvent): string => {
 
 const MarkdownEditor = ({ placeholder = '' }: MarkdownEditorProps): JSX.Element => {
     const [content, setContent] = useState('');
-    const debouncedVal = useDebounce(content, 25);
+    const debouncedVal = useDebounce(content, 15);
     const [currContent, undo, redo, set] = useUndoRedo(debouncedVal);
     const handleKeydown: EventListener = (e: CustomKBEvent) => {
         const command = getCommand(e);
@@ -105,7 +147,22 @@ const MarkdownEditor = ({ placeholder = '' }: MarkdownEditorProps): JSX.Element 
     return (
         <>
             <Header>
-                <h1>Super Awesome Markdown Editor</h1>
+                <h1>Awesome MD Editor</h1>
+                <div style={{ display: 'flex' }}>
+                    <Button
+                        type="button"
+                        onClick={() => undo()}
+                        style={{ marginRight: '1rem' }}>
+                        Undo
+                        <Tooltip>(⌘+z)</Tooltip>
+                    </Button>
+                    <Button
+                        type="button"
+                        onClick={() => redo()}>
+                        Redo
+                        <Tooltip>(⌘+⇧+z)</Tooltip>
+                    </Button>
+                </div>
             </Header>
             <Container>
                 <Textarea
