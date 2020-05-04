@@ -3,6 +3,7 @@ import Markdown from 'markdown-to-jsx';
 import styled from 'styled-components';
 
 const PreviewContainer = styled.div`
+  background: #f3f3f3;
   padding: 2rem;
   width: 50%;
 `;
@@ -14,14 +15,12 @@ type PreviewProps = {
   }
 };
 
-const Preview = ({ children, options }: PreviewProps): JSX.Element => {
-  return (
-    <PreviewContainer>
-      <Markdown options={{ ...options }}>
-        {children}
-      </Markdown>
-    </PreviewContainer>
-  );
-};
+const MarkdownPreview = ({ children, options }: PreviewProps): JSX.Element => (
+  <PreviewContainer>
+    <Markdown options={{ ...options }} data-testid="markdown-preview">
+      {children}
+    </Markdown>
+  </PreviewContainer>
+);
 
-export default Preview;
+export default MarkdownPreview;
