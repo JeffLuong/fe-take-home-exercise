@@ -14,6 +14,23 @@ const GlobalStyle = createGlobalStyle`
     html, body, #root {
         height: 100%;
     }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    ::-webkit-scrollbar {
+        width: .625rem; 
+    }
+
+    ::-webkit-scrollbar, ::-webkit-scrollbar-track {
+        background-color: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: #bdbebf;
+        border-radius: .25rem;
+    }
 `;
 
 const AppContainer = styled.div`

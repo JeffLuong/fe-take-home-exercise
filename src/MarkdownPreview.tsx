@@ -6,6 +6,12 @@ const PreviewContainer = styled.div`
   background: #f3f3f3;
   padding: 2rem;
   width: 50%;
+  overflow-y: auto;
+
+  @media (max-width: 960px) {
+    width: 100%;
+    height: 50%;
+  }
 `;
 
 type PreviewProps = {

@@ -2,14 +2,20 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { useDebounce, useUndoRedo, useEventListener } from './hooks';
-
 import MarkdownPreview from './MarkdownPreview';
 
+const headerHeight = '4.375rem';
+const headerHeightSm = '3.25rem';
+
 const Container = styled.div`
-    height: 100%;
+    height: calc(100% - ${headerHeight});
     box-sizing: border-box;
     display: flex;
-    padding: 2rem;
+
+    @media (max-width: 960px) {
+        flex-direction: column;
+        height: calc(100% - ${headerHeightSm});
+    }
 `;
 
 const Textarea = styled.textarea`
@@ -17,7 +23,37 @@ const Textarea = styled.textarea`
     font-size: inherit;
     resize: none;
     padding: 2rem;
+    height: 100%;
     width: 50%;
+    border: none;
+
+    &:focus {
+        outline: none;
+    }
+
+    @media (max-width: 960px) {
+        width: 100%;
+        height: 50%;
+    }
+`;
+
+const Header = styled.header`
+    background-color: #0077FF;
+    padding: 1rem 2rem;
+    height: ${headerHeight};
+
+    > h1 {
+        margin: 0;
+        color: #ffffff;
+    }
+
+    @media (max-width: 960px) {
+        height: ${headerHeightSm};
+
+        > h1 {
+            font-size: 1.125rem;
+        }
+    }
 `;
 
 type MarkdownEditorProps = {
@@ -67,16 +103,21 @@ const MarkdownEditor = ({ placeholder = '' }: MarkdownEditorProps): JSX.Element 
     useEventListener('keydown', handleKeydown);
 
     return (
-        <Container>
-            <Textarea
-                data-testid="markdown-textarea"
-                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>): void => setContent(e.target.value)}
-                value={currContent}
-                placeholder={placeholder} />
-            <MarkdownPreview options={{ forceBlock: true }}>
-                {currContent}
-            </MarkdownPreview>
-        </Container>
+        <>
+            <Header>
+                <h1>Super Awesome Markdown Editor</h1>
+            </Header>
+            <Container>
+                <Textarea
+                    data-testid="markdown-textarea"
+                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>): void => setContent(e.target.value)}
+                    value={currContent}
+                    placeholder={placeholder} />
+                <MarkdownPreview options={{ forceBlock: true }}>
+                    {currContent}
+                </MarkdownPreview>
+            </Container>
+        </>
     );
 };
 
