@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import { useDebounce, useUndoRedo, useEventListener } from './hooks';
+import { useUndoRedo, useEventListener } from './hooks';
 import MarkdownPreview from './MarkdownPreview';
 
 const headerHeight = '4.375rem';
@@ -59,7 +59,6 @@ const Header = styled.header`
         }
     }
 `;
-
 
 const Tooltip = styled.div`
     background-color: #001733;
@@ -123,24 +122,31 @@ const getCommand = (e: CustomKBEvent): string => {
 
 const MarkdownEditor = ({ placeholder = '' }: MarkdownEditorProps): JSX.Element => {
     const [content, setContent] = useState('');
-    const debouncedVal = useDebounce(content, 15);
-    const [currContent, undo, redo, set] = useUndoRedo(debouncedVal);
+    const [currContent, undo, redo, set] = useUndoRedo(content);
     const handleKeydown: EventListener = (e: CustomKBEvent) => {
         const command = getCommand(e);
         if (command === 'undo') {
             undo();
+            debugger;
             e.preventDefault();
         } else if (command === 'redo') {
             redo();
+            debugger;
             e.preventDefault();
         }
     };
 
     useEffect(() => {
-        if (debouncedVal !== currContent) {
-            set(debouncedVal);
+        if (content !== currContent) {
+            set(content);
         }
-    }, [debouncedVal]);
+    }, [content, set]);
+
+    useEffect(() => {
+        if (content !== currContent) {
+            setContent(currContent);
+        }
+    }, [currContent, set])
 
     useEventListener('keydown', handleKeydown);
 
@@ -168,10 +174,10 @@ const MarkdownEditor = ({ placeholder = '' }: MarkdownEditorProps): JSX.Element 
                 <Textarea
                     data-testid="markdown-textarea"
                     onChange={(e: React.ChangeEvent<HTMLTextAreaElement>): void => setContent(e.target.value)}
-                    value={currContent}
+                    value={content}
                     placeholder={placeholder} />
                 <MarkdownPreview options={{ forceBlock: true }}>
-                    {currContent}
+                    {content}
                 </MarkdownPreview>
             </Container>
         </>
